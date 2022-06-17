@@ -1,0 +1,16 @@
+
+
+Neural Network lab experiments list during lab classes:
+1. Batch training with static network 
+2. Batch training with dynamic network 
+3. Concurrent inputs in a static network 
+4. Concurrent inputs in a dynamic network 
+5. Incremental training of static network 
+6. Incremental training with dynamic network 
+7. Sequential input in a dynamic network
+8. Hebbian Learning 
+9. Covarriance Hypothesis 
+10. XOR
+11. Backpropagation
+12. A Simple neural network 
+13. CNN

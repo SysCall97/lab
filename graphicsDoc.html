@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- <link rel="stylesheet" href="./style.css"> -->
+        <!-- <link rel="stylesheet" href="./ns.css"> -->
+
+        <title>Graphics.h</title>
+        <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                color: white;
+            }
+
+            html,
+            body {
+                height: 100%;
+                width: 100%;
+            }
+
+            :root {
+                --left: #101c2c;
+                --right: #122033;
+                --bg: #2a2c58;
+                --djsBg: #1B2430;
+                --djsCode: #2f3136;
+            }
+
+            #main-section {
+                display: flex;
+                flex-direction: row;
+            }
+
+            #fake-sidebar {
+                height: 100vh;
+                
+                /* background-color: var(--djsBg); */
+
+                width: min(20%, 170px);
+                margin-right: 10px;
+            }
+
+            #side-section {
+                font-size: 1.2rem;
+                padding-top: 8px;
+                padding-bottom: 20px;
+                width: min(20%, 170px);
+                position: fixed;
+                height: 100vh;
+                overflow-x: hidden;
+                overflow-y: scroll;
+                background-color: var(--djsBg);
+                margin-right: 10px;
+            }
+
+            #doc-section {
+                background-color: var(--djsBg);
+                flex: 5;
+                padding-left: 32px;
+                padding-right: 16px;
+            }
+
+            .doc-data-title {
+                margin: 8px 16px;
+                color: cyan;
+            }
+
+            .data-body {
+                padding: 0px 32px;
+            }
+
+            .data-body>* {
+                margin-top: 8px;
+                padding: 8px 0;
+                border-radius: 8px;
+            }
+
+            .doc-data-declaration {
+                font-size: 1.2rem;
+                background-color: #180A0A;
+                color: #FEC260;
+                padding: 8px 10px;
+            }
+
+            .doc-data-code {
+                font-size: 1.2rem;
+                background-color: #2f3136;
+                padding: 8px 25px;
+            }
+
+            .doc-data-description {
+                font-size: 1.1rem;
+                background-color: #12261e;
+                padding: 8px 10px;
+            }
+
+            .doc-comments {
+                padding: 8px 10px;
+            }
+
+            .hotLink {
+                display: block;
+                text-decoration: none;
+                color: white;
+                padding: 8px 32px;
+            }
+
+            .hotLink:hover {
+                border-radius: 5px;
+                background-color: #383838;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: var(--djsBg);
+            }
+
+            ::-webkit-scrollbar {
+                width: 10px;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: rgb(173, 172, 172);
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
+        </style>
+    </head>
+
+    <body>
+        <header id="header-section"></header>
+        <main class="container" id="main-section">
+            <div class="sider-bar" id="side-section">
+                <details class="side-menu" open>
+                    <summary>graphics.h</summary>
+                    <div class="graphics-div" id="graphics-data">
+                        <!-- <a href="#" class="hotLink"> example</a> -->
+                    </div>
+                    </det>
+            </div>
+            <div id="fake-sidebar"></div>
+            <div class="doc" id="doc-section">
+            </div>
+        </main>
+
+        <footer id="footer-section"></footer>
+
+        <!-- <script src="./script.js"></script> -->
+        <script>
+            const data = [
+                {
+                    title: `arc`,
+                    declaration: `void arc(int x, int y, int stangle, int endangle, int radius);`,
+                    description: `"arc" function is used to draw an arc with center (x, y) and stangle specifies starting angle, endangle specifies the end angle and last parameter specifies the radius of the arc. arc function can also be used to draw a circle but for that starting angle and end angle should be 0 and 360 respectively.`,
+                    example: ["#include <graphics.h>", "#include <conio.h>", "int main()", "{", "   int gd = DETECT, gm;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   arc(100, 100, 0, 135, 50);", "   ", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: `In the program (100, 100) are coordinates of center of arc, 0 is the starting angle, 135 is the end angle and radius of the arc is 50.`
+                },
+                {
+                    title: `bar`,
+                    declaration: `void bar(int left, int top, int right, int bottom);`,
+                    description: `Bar function is used to draw a 2-dimensional, rectangular filled in bar . Coordinates of left top and right bottom corner are required to draw the bar. Left specifies the X-coordinate of top left corner, top specifies the Y-coordinate of top left corner, right specifies the X-coordinate of right bottom corner, bottom specifies the Y-coordinate of right bottom corner. Current fill pattern and fill color is used to fill the bar. To change fill pattern and fill color use setfillstyle.`,
+                    example: ["#include <graphics.h>", "#include <conio.h>", "main()", "{", "   int gd = DETECT, gm;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   bar(100, 100, 200, 200);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                }
+                ,
+                {
+                    title: `bar3d`,
+                    declaration: ` void bar3d(int left, int top, int right, int bottom, int depth, int topflag);`,
+                    description: `bar3d function is used to draw a 2-dimensional, rectangular filled in bar . Coordinates of left top and right bottom corner of bar are required to draw the bar. left specifies the X-coordinate of top left corner, top specifies the Y-coordinate of top left corner, right specifies the X-coordinate of right bottom corner, bottom specifies the Y-coordinate of right bottom corner, depth specifies the depth of bar in pixels, topflag determines whether a 3 dimensional top is put on the bar or not ( if it's non-zero then it's put otherwise not ). Current fill pattern and fill color is used to fill the bar. To change fill pattern and fill color use setfillstyle.`,
+                    example: ["#include<graphics.h>", "#include<conio.h>", "main()", "{", "   int gd = DETECT, gm;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   bar3d(100, 100, 200, 200, 20, 1);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `circle`,
+                    declaration: `void circle(int x, int y, int radius);`,
+                    description: `Circle function is used to draw a circle with center (x,y) and third parameter specifies the radius of the circle. The code given below draws a circle.`,
+                    example: ["#include<graphics.h>", "#include<conio.h>", "main()", "{", "   int gd = DETECT, gm;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   circle(100, 100, 50);", "   ", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: `In the above program (100, 100) are coordinates of center of the circle and 50 is the radius of circle.`
+                },
+                {
+                    title: `cleardevice`,
+                    declaration: `void cleardevice();`,
+                    description: `cleardevice function clears the screen in graphics mode and sets the current position to (0,0). Clearing the screen consists of filling the screen with current background color.`,
+                    example: ["#include <graphics.h>", "#include <conio.h>", "main()", "{", "   int gd = DETECT, gm;", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   outtext(\"Press any key to clear the screen.\");", "   getch();", "   cleardevice();", "   outtext(\"Press any key to exit...\");", "   ", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: `Don't use clrscr in graphics mode.`
+                },
+                {
+                    title: `closegraph`,
+                    declaration: `void closegraph();`,
+                    description: `closegraph function closes the graphics mode, deallocates all memory allocated by graphics system and restores the screen to the mode it was in before you called initgraph.`,
+                    example: ["#include<graphics.h>", "#include<conio.h>", "main()", "{", "   int gd = DETECT, gm;", "   ", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "   ", "   outtext(\"Press any key to close the graphics mode...\");", "   ", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `drawpoly`,
+                    declaration: `void drawpoly( int num, int *polypoints );`,
+                    description: `Drawpoly function is used to draw polygons i.e. triangle, rectangle, pentagon, hexagon etc.num indicates (n+1) number of points where n is the number of vertices in a polygon, polypoints points to a sequence of (n*2) integers . Each pair of integers gives x and y coordinates of a point on the polygon. We specify (n+1) points as first point coordinates should be equal to (n+1)th to draw a complete figure.
+
+        To understand more clearly we will draw a triangle using drawpoly, consider for example,the array :-
+        int points[] = { 320, 150, 420, 300, 250, 300, 320, 150};
+        
+        points array contains coordinates of triangle which are (320, 150), (420, 300) and (250, 300). Note that last point(320, 150) in array is same as first. See the program below and then its output, it will further clear your understanding.`,
+                    example: ["#include <graphics.h>", "#include <conio.h>", "main()", "{", "   int gd=DETECT,gm,points[]={320,150,420,300,250,300,320,150};", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   drawpoly(4, points);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `delay`,
+                    declaration: `void delay(int millisec);`,
+                    description: `The delay function is available in the winbgim implementation of BGI graphics. You do not need to include conio.h; just include graphics.h. The function pauses the computation for the the specified number of milliseconds.`,
+                    example: ["#include \"graphics.h\"", "int main(void)", "{", "   int midx, midy, i;", "   \/* initialize the window size *\/", "   initwindow(100, 100);", "   midx = getmaxx() \/ 2;", "   midy = getmaxy() \/ 2;", "   \/* loop through the fill patterns with 4 second delays *\/", "   for (i=SOLID_FILL; i<USER_FILL; i++) {", "      \/* set the fill style *\/", "      setfillstyle(i, getmaxcolor());", "      \/* draw the bar *\/", "      bar(midx-50, midy-50, midx+50, midy+50);", "      delay(4000);", "   }", "   \/* clean up *\/", "   closegraph();", "   return 0;", "}"],
+                    comments: `Return Value : None.`
+                },
+                {
+                    title: `ellipse`,
+                    declaration: `void ellipse(int x, int y, int stangle, int endangle, int xradius, int yradius);`,
+                    description: `Ellipse is used to draw an ellipse (x,y) are coordinates of center of the ellipse, stangle is the starting angle, end angle is the ending angle, and fifth and sixth parameters specifies the X and Y radius of the ellipse. To draw a complete ellipse strangles and end angle should be 0 and 360 respectively.`,
+                    example: ["#include<graphics.h>", "#include<conio.h>", "main()", "{", "   int gd = DETECT, gm;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   ellipse(100, 100, 0, 360, 50, 25);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `fillellipse`,
+                    declaration: `void fillellipse(int x, int y, int xradius, int yradius);`,
+                    description: `x and y are coordinates of center of the ellipse, xradius and yradius are x and y radius of ellipse respectively.`,
+                    example: ["#include <graphics.h>", "#include <conio.h>", "int main()", "{", "   int gd = DETECT, gm;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "             ", "   fillellipse(100, 100, 50, 25);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `fillpoly`,
+                    declaration: `void drawpoly( int num, int *polypoints );`,
+                    description: `Fillpoly function draws and fills a polygon. It require same arguments as drawpoly.fillpoly fills using current fill pattern and color which can be changed using setfillstyle.`,
+                    example: ["#include <graphics.h>", "#include <conio.h>", "main()", "{", "   int gd=DETECT,gm,points[]={320,150,440,340,230,340,320,150};", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   fillpoly(4, points);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `floodfill`,
+                    declaration: `void floodfill(int x, int y, int border);`,
+                    description: `floodfill function is used to fill an enclosed area. Current fill pattern and fill color is used to fill the area.(x, y) is any point on the screen if (x,y) lies inside the area then inside will be filled otherwise outside will be filled,border specifies the color of boundary of area. To change fill pattern and fill color use setfillstyle. Code given below draws a circle and then fills it.`,
+                    example: ["#include <graphics.h>", "#include <conio.h>", "main()", "{", "   int gd = DETECT, gm;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   setcolor(RED);", "   circle(100,100,50);", "   floodfill(100,100,RED);", "   ", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: `In the above program a circle is drawn in RED color. Point (100,100) lies inside the circle as it's the center of circle, third argument to floodfill is RED which is color of boundary of circle. So the output of above program will be a circle filled with WHITE color as it's the default fill color.`
+                },
+                {
+                    title: `getarccords`,
+                    declaration: `void getarccoords(struct arccoordstype *var);`,
+                    description: `getarccoords function is used to get coordinates of arc which is drawn most recently. arccoordstype is a predefined structure which is defined as follows:
+
+        struct arccoordstype
+        {
+           int x, y;                /*   center point of arc    */
+           int xstart, ystart;      /*   start position         */
+           int xend, yend;          /*   end position           */
+        };
+        address of a structure variable of type arccoordstype is passed to function getarccoords.`,
+                    example: ["#include<graphics.h>", "#include<conio.h>", "#include<stdio.h>", "main()", "{", "   int gd = DETECT, gm;", "   struct arccoordstype a;", "   char arr[100];", "", "   initgraph(&gd, &gm,\"C:\\\\TC\\\\BGI\");", "", "   arc(250,200,0,90,100);", "   getarccoords(&a);", "", "   sprintf(arr,\"(%d, %d)\",a.xstart,a.ystart);", "   outtextxy(360,195,arr);", "", "   sprintf(arr,\"(%d, %d)\",a.xend,a.yend);", "   outtextxy(245,85,arr);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: `In the program, we have drawn an arc, and then we get the coordinates of its endpoints using getarccoords. Coordinates so obtained are displayed using outtextxy.`
+                },
+                {
+                    title: `getbkcolor`,
+                    declaration: `int getbkcolor();`,
+                    description: `Function getbkcolor returns the current background-color.e.g. color = getbkcolor(); // color is an int variable
+        If current background color is GREEN, color will be 2.`,
+                    example: ["#include <graphics.h>", "#include <conio.h>", "int main()", "{", "   int gd = DETECT, gm, bkcolor;", "   char a[100];", "", "   initgraph(&gd,&gm,\"C:\\\\TC\\\\BGI\");", "   ", "   bkcolor = getbkcolor();", "", "   sprintf(a, \"Current background color = %d\", bkcolor);", "   outtextxy(10, 10, a);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `getcolor`,
+                    declaration: `int getcolor();`,
+                    description: `getcolor function returns the current drawing color.e.g. a = getcolor(); // a is an integer variable
+        if current drawing color is WHITE then a will be 15.
+        See colors in C graphics.`,
+                    example: ["#include<graphics.h>", "#include<conio.h>", "main()", "{", "   int gd = DETECT, gm, drawing_color;", "   char a[100];", "", "   initgraph(&gd,&gm,\"C:\\\\TC\\\\BGI\");", "   ", "   drawing_color = getcolor();", "", "   sprintf(a,\"Current drawing color = %d\", drawing_color);", "   outtextxy( 10, 10, a );", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `getdrivername`,
+                    declaration: `getdrivername()`,
+                    description: `Function getdrivername returns a pointer to the current graphics driver.`,
+                    example: ["#include <graphics.h>", "#include <conio.h>", "int main()", "{", "   int gd = DETECT, gm;", "", "   char *name;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   name = getdrivername();", "   outtextxy(200, 200, name);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `getimage`,
+                    declaration: `void getimage(int left, int top, int right, int bottom, void *bitmap);`,
+                    description: `etimage function saves a bit image of specified region into memory, region can be any rectangle.getimage copies an image from screen to memory. Left, top, right, and bottom define the area of the screen from which the rectangle is to be copied, bitmap points to the area in memory where the bit image is stored.`,
+                    example: ["#include<graphics.h>", "#include<conio.h>", "#include<stdlib.h>", "main()", "{", "   int gd = DETECT, gm, area, temp1, temp2, left = 25, top = 75;", "   void *p;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   setcolor(YELLOW);", "   circle(50, 100, 25);", "   setfillstyle(SOLID_FILL, YELLOW);", "   floodfill(50, 100, YELLOW);", "", "   setcolor(BLACK);", "   setfillstyle(SOLID_FILL, BLACK);", "   fillellipse(44, 85, 2, 6);", "   fillellipse(56, 85, 2, 6);", "", "   ellipse(50, 100, 205, 335, 20, 9);", "   ellipse(50, 100, 205, 335, 20, 10);", "   ellipse(50, 100, 205, 335, 20, 11);", "", "   area = imagesize(left, top, left + 50, top + 50);", "   p = malloc(area);", "", "   setcolor(WHITE);", "   settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 2);", "   outtextxy(155, 451, \"Smiling Face Animation\");", "", "   setcolor(BLUE);", "   rectangle(0, 0, 639, 449);", "", "   while(!kbhit())", "   {", "      temp1 = 1 + random (588);", "      temp2 = 1 + random (380);", "", "      getimage(left, top, left + 50, top + 50, p);", "      putimage(left, top, p, XOR_PUT);", "      putimage(temp1 , temp2, p, XOR_PUT);", "      delay(100);", "      left = temp1;", "      top = temp2;", "   }", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: `This animation using C draws a smiling face which appears at random positions on the screen.`
+                },
+                {
+                    title: `getmaxcolor`,
+                    declaration: `int getmaxcolor();`,
+                    description: `getmaxcolor function returns maximum color value for current graphics mode and driver. Total number of colors available for current graphics mode and driver are ( getmaxcolor() + 1 ) as color numbering starts from zero.`,
+                    example: ["#include<graphics.h>", "#include<conio.h>", "main()", "{", "   int gd = DETECT, gm, max_colors;", "   char a[100];", "", "   initgraph(&gd,&gm,\"C:\\\\TC\\\\BGI\");", "   ", "   max_colors = getmaxcolor();", "", "   sprintf(a,\"Maximum number of colors for current graphics mode and driver = %d\",max_colors+1);", "   outtextxy(0, 40, a);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `getmaxx`,
+                    declaration: `int getmaxx();`,
+                    description: `getmaxx function returns the maximum X coordinate for current graphics mode and driver.`,
+                    example: ["#include<graphics.h>", "#include<conio.h>", "main()", "{", "   int gd = DETECT, gm, max_x;", "   char array[100];", "   ", "   initgraph(&gd,&gm,\"C:\\\\TC\\\\BGI\");", "", "   max_x = getmaxx();", "", "   sprintf(array, \"Maximum X coordinate for current graphics mode and driver = %d.\",max_x);", "   outtext(array);", "   ", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `getmaxy`,
+                    declaration: `int getmaxy();`,
+                    description: `getmaxy function returns the maximum Y coordinate for current graphics mode and driver.`,
+                    example: ["#include<graphics.h>", "#include<conio.h>", "main()", "{", "   int gd = DETECT, gm, max_y;", "   char array[100];", "   ", "   initgraph(&gd,&gm,\"C:\\\\TC\\\\BGI\");", "", "   max_y = getmaxy();", "", "   sprintf(array, \"Maximum Y coordinate for current graphics mode and driver is = %d.\",max_y);", "   outtext(array);", "   ", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `getpixel`,
+                    declaration: `int getpixel(int x, int y);`,
+                    description: `getpixel function returns the color of pixel present at location(x, y).`,
+                    example: ["#include<graphics.h>", "#include<conio.h>", "main()", "{", "  int gd = DETECT, gm, color;", "  char array[50];", "", "  initgraph(&gd,&gm,\"C:\\\\TC\\\\BGI\");", "", "  color = getpixel(0, 0);", "", "  sprintf(array,\"color of pixel at (0,0) = %d\",color);", "  outtext(array);", "", "  getch();", "  closegraph();", "  return 0;", "}"],
+                    comments: `As we haven't drawn anything on screen and by default screen is BLACK, therefore color of pixel at (0,0) is BLACK. So output of program will be color of pixel at (0,0) is 0, as 0 indicates BLACK color.`
+                },
+                {
+                    title: `getx`,
+                    declaration: `int getx();`,
+                    description: `The function getx returns the X coordinate of the current position.`,
+                    example: ["#include <graphics.h>", "#include <conio.h>", "main()", "{", "   int gd = DETECT, gm;", "   char array[100];", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   sprintf(array, \"Current position of x = %d\", getx());", "", "   outtext(array);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `gety`,
+                    declaration: `int gety();`,
+                    description: `gety function returns the y coordinate of current position.`,
+                    example: ["#include <graphics.h>", "#include <conio.h>", "main()", "{", "   int gd = DETECT, gm, y;", "   char array[100];", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   y = gety();", "   ", "   sprintf(array, \"Current position of y = %d\", y);", "", "   outtext(array);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `graphdefaults`,
+                    declaration: `void graphdefaults();`,
+                    description: `graphdefaults function resets all graphics settings to their defaults.It resets the following graphics settings :-
+
+        i)Sets the viewport to the entire screen.
+        ii)Moves the current position to (0,0).
+        iii)Sets the default palette colors, background color, and drawing color.
+        iv)Sets the default fill style and pattern.
+        v)Sets the default text font and justification.`,
+                    example: ["#include <graphics.h>", "#include <conio.h>", "main()", "{", "   int gd = DETECT, gm;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   setcolor(RED);", "   setbkcolor(YELLOW);", "", "   circle(250, 250, 50);", "", "   getch();", "   graphdefaults();", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: `In the above program we have first changed the drawing color to RED and background color to YELLOW and then drawn a circle with (250, 250) as center and 50 as radius. When the user will press a key graphdefaults is called and both drawing and background color will be reset to their default values i.e. WHITE and BLACK respectively. See colors in C graphics.`
+                },
+                {
+                    title: `grapherrormsg`,
+                    declaration: `char *grapherrormsg( int errorcode );`,
+                    description: `grapherrormsg function returns an error message string.`,
+                    example: ["#include <graphics.h>", "#include <stdlib.h>", "#include <conio.h>", "main()", "{", "   int gd, gm, errorcode;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   errorcode = graphresult();", "", "   if(errorcode != grOk)", "   {", "      printf(\"Graphics error: %s\\n\", grapherrormsg(errorcode));", "      printf(\"Press any key to exit.\");", "      getch();", "      exit(1);", "   }", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: `In the above program we have not written gd = DETECT.
+        After running this program we get the output :-
+        Graphics error: Graphics hardware not detected
+        Press any key to exit.`
+                },
+                {
+                    title: `imagesize`,
+                    declaration: `unsigned int imagesize(int left, int top, int right, int bottom);`,
+                    description: `imagesize function returns the number of bytes required to store a bitimage. This function is used when we are using getimage.`,
+                    example: ["#include <graphics.h>", "#include <conio.h>", "main()", "{", "   int gd = DETECT, gm, bytes;", "   char array[100];", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   circle(200, 200, 50);", "   line(150, 200, 250, 200);", "   line(200, 150, 200, 250);", "", "   bytes = imagesize(150, 150, 250, 250);", "   sprintf(array, \"Number of bytes required to store required area = %d\", bytes);", "   outtextxy(10, 280, array);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `initwindow`,
+                    declaration: `int initwindow(int width, int height, const char* title="Windows BGI", int left=0, int top=0, bool dbflag=false, closeflag=true);`,
+                    description: `The initwindow function is available in the winbgim implementation of BGI graphics. You do not need to include conio.h; just include graphics.h. The function initializes the graphics system by opening a graphics window of the specified size. The first two parameters (width and height) are required, but all other parameters have default values.
+The title parameter is the title that will be printed at the top of the window (with a default of "Windows BGI".) If this is set to the empty string (no characters), then the window will be opened without a title bar or border (typically used for a popup message that the user can then close by clicking), and the user will not be able to move this window. If you want a title bar with no visible title, then set the title to a string containing one space.
+
+The left and top parameters determine the screen coordinates of the left and top sides of the window.
+
+The dbflag parameter determines whether double-buffering for the window is automatically turned on as described in the swapbuffers function (true means that double-buffering will be turned on).
+
+If the closeflag parameter is true, then the user can click on the window's close button to shut down the entire program.
+
+Return Value
+The original version of initgraph was a void function (with no flag argument), and only one graphics window could be created in any program. The new version allows multiple graphics windows to be created. The return value from the new initwindow function is a unique int identifier that can be used as an argument to setcurrentwindow in order to set which of several windows is currently being used. Immediately after calling initwindow, the current window is always the window that was just created.`,
+                    example: ["\/* initwindow example *\/ ", "#include \"graphics.h\"", "int main(void)", "{", "   \/* initialize graphics window at 400 x 300 *\/", "   initwindow(400, 300);", "   \/* draw a line *\/", "   line(0, 0, getmaxx(), getmaxy());", "   \/* clean up *\/", "   getch();", "   closegraph();", "   return 0;", "}", "", "\/* initwindow example with two windows *\/ ", "", "#include \"graphics.h\"", "int main(void)", "{", "   int wid1, wid2;", "   \/* initialize graphics windows *\/", "   wid1 = initwindow(400, 300);", "   wid2 = initwindow(300, 400, 200, 100);", "   \/* draw lines *\/", "   setcurrentwindow(wid1);", "   line(0, 0, getmaxx(), getmaxy());", "   setcurrentwindow(wid2);", "   line(0, 0, getmaxx(), getmaxy());", "   \/* clean up *\/", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `line`,
+                    declaration: `void line(int x1, int y1, int x2, int y2);`,
+                    description: `line function is used to draw a line from a point(x1,y1) to point(x2,y2) i.e. (x1,y1) and (x2,y2) are end points of the line.The code given below draws a line.`,
+                    example: ["#include <graphics.h>", "#include <conio.h>", "main()", "{", "   int gd = DETECT, gm;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   line(100, 100, 200, 200);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: `Above program draws a line from (100, 100) to (200, 200).`
+                },
+                {
+                    title: `lineto`,
+                    declaration: `void lineto(int x,int y)`,
+                    description: `Function lineto draws a line from the current position (CP) to the point (x, y), you can get current position using getx and gety function.`,
+                    example: ["#include <graphics.h>", "#include <conio.h>", "int main()", "{", "   int gd = DETECT, gm;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   moveto(100, 100);", "   lineto(200, 200);  ", "   ", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `linerel`,
+                    declaration: ``,
+                    description: `Linerel function draws a line from the current position(CP) to a point that is a relative distance (x, y) from the CP, then advances the CP by (x, y). You can use getx and gety to find the current position.`,
+                    example: ["#include <graphics.h>", "#include <conio.h>", "main()", "{", "   int gd = DETECT, gm;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   moveto(250, 250);", "   linerel(100, -100);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `moveto`,
+                    declaration: `void moveto(int x, int y);`,
+                    description: `moveto function changes the current position (CP) to (x, y)`,
+                    example: ["#include <graphics.h>", "#include <conio.h>", "main()", "{", "   int gd = DETECT, gm;", "   char msg[100];", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   sprintf(msg, \"X = %d, Y = %d\",getx(),gety());", "", "   outtext(msg);", "", "   moveto(50, 50);", "", "   sprintf(msg, \"X = %d, Y = %d\", getx(), gety());", "", "   outtext(msg);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `moverel`,
+                    declaration: ` void moverel(int x, int y);`,
+                    description: ``,
+                    example: ["#include <graphics.h>", "#include <conio.h>", "main()", "{", "   int gd = DETECT, gm, x, y;", "   char message[100];", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   moveto(100, 100);", "   moverel(100, -100);", "", "   x = getx();", "   y = gety();", "", "   sprintf(message, \"Current x position = %d and y position = %d\", x, y);", "   outtextxy(10, 10, message);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `outtext`,
+                    declaration: `void outtext(char *string);`,
+                    description: `outtext function displays text at current position.`,
+                    example: ["#include<graphics.h>", "#include<conio.h>", "main()", "{", "   int gd = DETECT, gm;", "   ", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "   ", "   outtext(\"To display text at a particular position on the screen use outtextxy\");", "   ", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: `Do not use text mode functions like printf, gotoxy etc while working in graphics mode. Also note '\n' or other escape sequences do not work in graphics mode. You have to ensure that the text doesn't go beyond the screen while using outtext.`
+                },
+                {
+                    title: `outtextxy`,
+                    declaration: `void outtextxy(int x, int y, char *string);`,
+                    description: `outtextxy function display text or string at a specified point(x,y) on the screen.x, y are coordinates of the point and third argument contains the address of string to be displayed.`,
+                    example: ["#include<graphics.h>", "#include<conio.h>", "main()", "{", "   int gd = DETECT, gm;", "   ", "   initgraph(&gd,&gm,\"C:\\\\TC\\\\BGI\");", "   ", "   outtextxy(100, 100, \"Outtextxy function\");", "   ", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `pieslice`,
+                    declaration: ``,
+                    description: ``,
+                    example: ["#include <graphics.h>", "#include <conio.h>", "main()", "{", "   int gd = DETECT, gm;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   pieslice(200, 200, 0, 135, 100);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `putimage`,
+                    declaration: `void putimage(int left, int top, void *ptr, int op);`,
+                    description: `putimage function outputs a bit image onto the screen.putimage puts the bit image previously saved with getimage back onto the screen, with the upper left corner of the image placed at (left, top). ptr points to the area in memory where the source image is stored. The op argument specifies a operator that controls how the color for each destination pixel on screen is computed, based on pixel already on screen and the corresponding source pixel in memory.`,
+                    example: [],
+                    comments: ``
+                },
+                {
+                    title: `putpixel`,
+                    declaration: `void putpixel(int x, int y, int color);`,
+                    description: `putpixel function plots a pixel at location (x, y) of specified color.For example,if we want to draw a GREEN color pixel at (35, 45) then we will write putpixel(35, 35, GREEN); in our c program, putpixel function can be used to draw circles, lines and ellipses using various algorithms.`,
+                    example: ["#include<graphics.h>", "#include<conio.h>", "main()", "{", "   int gd = DETECT, gm;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   putpixel(25, 25, RED);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: `Output of this program will be a RED pixel on screen at (25, 25) . Try to spot that pixel with your eyes at left top portion of your computer screen.`
+                },
+                {
+                    title: `rectangle`,
+                    declaration: `void rectangle(int left, int top, int right, int bottom);`,
+                    description: `rectangle function is used to draw a rectangle. Coordinates of left top and right bottom corner are required to draw the rectangle. left specifies the X-coordinate of top left corner, top specifies the Y-coordinate of top left corner, right specifies the X-coordinate of right bottom corner, bottom specifies the Y-coordinate of right bottom corner. The code given below draws a rectangle.`,
+                    example: ["#include<graphics.h>", "#include<conio.h>", "main()", "{", "   int gd = DETECT, gm;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   rectangle(100,100,200,200);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `sector`,
+                    declaration: `void sector( int x, int y, int stangle, int endangle, int xradius, int yradius);`,
+                    description: `Sector function draws and fills an elliptical pie slice.`,
+                    example: ["#include <graphics.h>", "#include <conio.h>", "main()", "{", "   int gd = DETECT, gm;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   sector(100, 100, 0, 135, 25, 35);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `setbkcolor`,
+                    declaration: `void setbkcolor(int color);`,
+                    description: `setbkcolor function changes current background color e.g. setbkcolor(YELLLOW) changes the current background color to YELLOW.
+        Remember that default drawing color is WHITE and background color is BLACK.`,
+                    example: ["#include<graphics.h>", "#include<conio.h>", "main()", "{", "   int gd = DETECT, gm;", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "   ", "   outtext(\"Press any key to change the background color to GREEN.\");", "   getch();", "   ", "   setbkcolor(GREEN);", "   ", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `setcolor`,
+                    declaration: `void setcolor(int color);`,
+                    description: `In Turbo Graphics each color is assigned a number. Total 16 colors are available. Strictly speaking number of available colors depends on current graphics mode and driver.For Example :- BLACK is assigned 0, RED is assigned 4 etc. setcolor function is used to change the current drawing color.e.g. setcolor(RED) or setcolor(4) changes the current drawing color to RED. Remember that default drawing color is WHITE.`,
+                    example: ["#include<graphics.h>", "#include<conio.h>", "main()", "{", "   int gd = DETECT, gm;", "   initgraph(&gd,&gm,\"C:\\\\TC\\\\BGI\");", "", "   circle(100,100,50);          \/* drawn in white color *\/", "   setcolor(RED);", "   circle(200,200,50);          \/* drawn in red color   *\/", "       ", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `setfillstyle`,
+                    declaration: `void setfillstyle( int pattern, int color);`,
+                    description: `setfillstyle function sets the current fill pattern and fill color.Different fill styles:
+
+        enum fill_styles
+        {
+           EMPTY_FILL,
+           SOLID_FILL,
+           LINE_FILL,
+           LTSLASH_FILL,
+           SLASH_FILL,
+           BKSLASH_FILL,
+           LTBKSLASH_FILL,
+           HATCH_FILL,
+           XHATCH_FILL,
+           INTERLEAVE_FILL,
+           WIDE_DOT_FILL,
+           CLOSE_DOT_FILL,
+           USER_FILL
+        };`,
+                    example: ["#include<graphics.h>", "#include<conio.h>", "main()", "{", "   int gd = DETECT, gm;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   setfillstyle(XHATCH_FILL, RED);", "   circle(100, 100, 50);", "   floodfill(100, 100, WHITE);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `setlinestyle`,
+                    declaration: `void setlinestyle(int linestyle, unsigned pattern, int thickness);`,
+                    description: `Available line styles:
+
+        enum line_styles
+        {
+           SOLID_LINE,
+           DOTTED_LINE,
+           CENTER_LINE,
+           DASHED_LINE,
+           USERBIT_LINE
+        };`,
+                    example: ["#include <graphics.h>", "int main()", "{", "  int gd = DETECT, gm, c , x = 100, y = 50;", "", "  initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "  for (c = 0; c < 5; c++)", "  {", "    setlinestyle(c, 0, 2);", "", "    line(x, y, x+200, y);", "    y = y + 25;", "  }", "", "  getch();", "  closegraph();", "  return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `settextstyle`,
+                    declaration: `void settextstyle( int font, int direction, int charsize);`,
+                    description: `Settextstyle function is used to change the way in which text appears, using it we can modify the size of text, change direction of text and change the font of text.font argument specifies the font of text, Direction can be HORIZ_DIR (Left to right) or VERT_DIR (Bottom to top).Different fonts
+        enum font_names
+        {
+           DEFAULT_FONT,
+           TRIPLEX_FONT,
+           SMALL_FONT,
+           SANS_SERIF_FONT,
+           GOTHIC_FONT,
+           SCRIPT_FONT,
+           SIMPLEX_FONT,
+           TRIPLEX_SCR_FONT,
+           COMPLEX_FONT,
+           EUROPEAN_FONT,
+           BOLD_FONT
+        };`,
+                    example: ["#include <graphics.h>", "#include <conio.h>", " ", "main()", "{", "   int gd = DETECT, gm, x = 25, y = 25, font = 0;", "   ", "   initgraph(&gd,&gm,\"C:\\\\TC\\\\BGI\");", " ", "   for (font = 0; font <= 10; font++)", "   {", "      settextstyle(font, HORIZ_DIR, 1);", "      outtextxy(x, y, \"Text with different fonts\");", "      y = y + 25;", "   }", " ", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `setviewport`,
+                    declaration: `void setviewport(int left, int top, int right, int bottom, int clip);`,
+                    description: `setviewport function is used to restrict drawing to a particular portion on the screen. For example,setviewport(100 , 100, 200, 200, 1);
+        will restrict our drawing activity inside the rectangle(100,100, 200, 200).
+        left, top, right, bottom are the coordinates of main diagonal of rectangle in which we wish to restrict our drawing. Also note that the point (left, top) becomes the new origin.`,
+                    example: ["#include<graphics.h>", "#include<conio.h>", "main()", "{", "   int gd = DETECT, gm, midx, midy;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   midx = getmaxx()\/2;", "   midy = getmaxy()\/2;", "", "   setviewport(midx - 50, midy - 50, midx + 50, midy + 50, 1);", "   circle(50, 50, 55);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `textheight`,
+                    declaration: `int textheight(char *string);`,
+                    description: `textheight function returns the height of a string in pixels.`,
+                    example: ["#include<graphics.h>", "#include<conio.h>", "main()", "{", "    int gd = DETECT, gm, height;", "    char array[100];", "", "    initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "    height = textheight(\"C programming\");", "", "    sprintf(array,\"Textheight = %d\",height);", "    outtext(array);", "", "    getch();", "    closegraph();", "    return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `textwidth`,
+                    declaration: `int textwidth(char *string);`,
+                    description: `Textwidth function returns the width of a string in pixels.`,
+                    example: ["#include <stdio.h>", "#include <graphics.h>", "#include <conio.h>", "int main()", "{", "   int gd = DETECT, gm, width;", "   char array[100];", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   width = textwidth(\"C programming\");", "", "   sprintf(array,\"Textwidth = %d\",width);", "   outtext(array);", "", "   getch();", "   closegraph();", "   return 0;", "}"],
+                    comments: ``
+                },
+                {
+                    title: `C Color Macro`,
+                    declaration: ``,
+                    description: "",
+                    example: ["BLACK         0",
+                        "BLUE         =  1",
+                        "GREEN        =  2",
+                        "CYAN         =  3",
+                        "RED          =  4",
+                        "MAGENTA      =  5",
+                        "BROWN        =  6",
+                        "LIGHTGRAY    =  7",
+                        "DARKGRAY     =  8",
+                        "LIGHTBLUE    =  9",
+                        "LIGHTGREEN   = 10",
+                        "LIGHTCYAN    = 11",
+                        "LIGHTRED     = 12",
+                        "LIGHTMAGENTA = 13",
+                        "YELLOW       = 14",
+                        "WHITE        = 15",],
+                    comments: ""
+                },
+                {
+                    title: `C Fill Pattern`,
+                    declaration: ``,
+                    description: "",
+                    example: [
+                        "EMPTY_FILL     =   0",
+                        "SOLID_FILL     =   1",
+                        "LINE_FILL      =   2",
+                        "LTSLASH_FILL   =   3  ",
+                        "SLASH_FILL     =   4",
+                        "BKSLASH_FILL   =   5",
+                        "LTBKSLASH_FILL =   6 ",
+                        "HATCH_FILL     =   7 ",
+                        "XHATCH_FILL    =   8",
+                        "INTERLEAVE_FILL=   9",
+                        "WIDE_DOT_FILL  =  10",
+                        "CLOSE_DOT_FILL =  11",
+                        "USER_FILL      =  12 ",
+
+                    ],
+                    comments: ""
+                }
+            ];
+
+
+            const graphicsDataDiv = document.getElementById('graphics-data');
+            const test = {
+                title: `arc`,
+                declaration: `void arc(int x, int y, int stangle, int endangle, int radius);`,
+                description: `"arc" function is used to draw an arc with center (x, y) and stangle specifies starting angle, endangle specifies the end angle and last parameter specifies the radius of the arc. arc function can also be used to draw a circle but for that starting angle and end angle should be 0 and 360 respectively.`,
+                example: ["#include <graphics.h>", "#include <conio.h>", "int main()", "{", "   int gd = DETECT, gm;", "", "   initgraph(&gd, &gm, \"C:\\\\TC\\\\BGI\");", "", "   arc(100, 100, 0, 135, 50);", "   ", "   getch();", "   closegraph();", "   return 0;", "}"],
+                comments: `In the program (100, 100) are coordinates of center of arc, 0 is the starting angle, 135 is the end angle and radius of the arc is 50.`
+            };
+
+            const docDiv = document.getElementById('doc-section');
+
+            function addGrahphicsDocData(eleObj = test) {
+
+                const docData = document.createElement('div');
+                docData.classList.add('doc-data');
+
+                const docTitel = document.createElement('h2');
+                docTitel.classList.add('doc-data-title');
+                docTitel.innerText = eleObj.title;
+                docData.appendChild(docTitel);
+
+                const dataBody = document.createElement('div');
+                dataBody.classList.add('data-body')
+                dataBody.setAttribute('id', eleObj.title);
+
+                const dataDeclaration = document.createElement('p');
+                dataDeclaration.classList.add('doc-data-declaration')
+                dataDeclaration.innerText = eleObj.declaration;
+                dataBody.appendChild(dataDeclaration);
+
+                const dataDescription = document.createElement('p')
+                dataDescription.classList.add('doc-data-description');
+                dataDescription.innerText = eleObj.description;
+                dataBody.appendChild(dataDescription);
+
+                const codeDiv = document.createElement('div')
+                codeDiv.classList.add('doc-data-code');
+                if (eleObj && eleObj.example.length) {
+                    eleObj.example.forEach((v) => {
+                        const pd = document.createElement('p');
+                        pd.innerText = v;
+                        codeDiv.appendChild(pd);
+                    });
+                }
+
+                dataBody.appendChild(codeDiv);
+
+                const comment = document.createElement('p')
+                comment.classList.add('doc-comments')
+                comment.innerText = eleObj.comments;
+
+                dataBody.appendChild(comment);
+
+                docData.appendChild(dataBody);
+                // const 
+
+                const manP = document.getElementById('doc-section');
+                manP.appendChild(docData)
+
+            };
+            data.forEach((v) => addGrahphicsDocData(v));
+
+            function addLinksGraphics() {
+                const host = document.getElementById('graphics-data');
+                data.forEach((v) => {
+                    const link = document.createElement('a');
+                    link.classList.add('hotLink')
+                    link.setAttribute('href', `#${v.title}`);
+                    link.innerText = v.title;
+                    host.appendChild(link);
+                })
+            }
+            addLinksGraphics()
+
+        </script>
+    </body>
+
+</html>
